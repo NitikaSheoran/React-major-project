@@ -20,7 +20,7 @@ export class Service {
             return await this.databases.createDocument(
                 conf.appwriteDatabaseId,
                 conf.appwriteCollectionId,
-                ID.unique(),  // ✅ Fix here
+                ID.unique(),  
                 {
                     title,
                     slug,
@@ -95,7 +95,7 @@ export class Service {
         }
     }
 
-    // 🔽 File Handling
+    //  File Handling
 
     async uploadFile(file) {
         try {
@@ -136,6 +136,6 @@ export class Service {
     }
 }
 
-// ✅ Exporting singleton
+//  Exporting singleton
 const service = new Service();
 export default service;
