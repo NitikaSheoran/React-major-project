@@ -6,10 +6,27 @@ function PostCard({ $id, title, featuredImage }) {
     const [imageUrl, setImageUrl] = useState(null);
 
     useEffect(() => {
-        if (featuredImage) {
-            const preview = appwriteService.getFilePreview(featuredImage);
-            setImageUrl(preview.href); // extract URL from Appwrite response
-        }
+        let isMounted = true; // prevent state update if unmounted
+
+        const fetchPreview = async () => {
+            if (featuredImage) {
+                try {
+                    const preview = await appwriteService.getFileView(featuredImage);
+                    const url = typeof preview === "string" ? preview : preview.href;
+                    console.log(url)
+                    if (isMounted) {
+                        setImageUrl(url); // sometimes Appwrite returns an object or URL
+                    }
+                } catch (err) {
+                    console.error('Error fetching image preview', err);
+                }
+            }
+        };
+
+        fetchPreview();
+
+        return () => {
+            isMounted = false;};
     }, [featuredImage]);
 
     return (
